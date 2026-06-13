@@ -1,8 +1,8 @@
 # CodeSage
 
 CodeSage is a reference implementation of an asynchronous pull-request review service. It validates GitHub webhooks,
-queues review work, prevents duplicate reviews, runs a deterministic analysis provider, persists findings, exposes
-metrics, and presents results in a React dashboard.
+queues review work, prevents duplicate reviews, runs OpenAI, Claude, or deterministic demo analysis providers,
+persists findings, exposes metrics, and presents results in a React dashboard.
 
 It is a portfolio/reference project, not a hosted production service.
 
@@ -11,8 +11,8 @@ It is a portfolio/reference project, not a hosted production service.
 - Constant-time HMAC-SHA256 GitHub webhook verification
 - PostgreSQL-backed duplicate-review prevention
 - RabbitMQ analysis, retry, and dead-letter queues
-- Deterministic demo workflow without GitHub or AI-provider secrets
-- AI provider and GitHub operation interfaces
+- OpenAI and Claude provider adapters with deterministic demo fallback
+- AI provider and GitHub operation interfaces with prompt-injection-aware review prompts
 - Micrometer/Prometheus review, provider, queue, token, and cost metrics
 - Responsive review command-center dashboard
 - CI coverage, dependency, secret, CodeQL, Trivy, Docker-build, and demo-smoke gates
@@ -57,15 +57,12 @@ Verified on June 13, 2026:
 
 | Surface | Result |
 |---|---|
-| Backend | 13 tests passed |
-| Backend gated business core | 97.8% line, 82.1% branch |
+| Backend | 18 tests passed |
+| Backend gated business core | JaCoCo gate met |
 | Frontend | 4 tests passed |
 | Frontend | 93.06% line, 85% branch |
 | npm audit | 0 vulnerabilities |
-| Docker Compose config | Demo configuration valid |
-
-Docker startup and the demo HTTP workflow were not executed locally because Docker Desktop was unavailable. CI runs
-that workflow on Linux.
+| Docker Compose demo | Build, health checks, demo review POST, recent reviews API, and frontend HTTP passed |
 
 ## Configuration
 
@@ -78,8 +75,8 @@ CODESAGE_DEMO_ENABLED=false
 
 ## Important limitations
 
-- The new provider interface currently ships only with the deterministic demo provider; remote provider adapters are
-  future work.
+- Remote provider calls require provider API keys and network egress; the deterministic provider remains the supported
+  no-secrets demo path.
 - Duplicate prevention keys on repository and PR number, not PR head SHA.
 - DLQ reprocessing is manual.
 - Actuator network access control must be enforced by the deployment platform.
@@ -87,7 +84,7 @@ CODESAGE_DEMO_ENABLED=false
 
 ## Roadmap
 
-1. Add hardened remote AI provider adapters with configurable retry, timeout, and circuit-breaker policies.
-2. Version reviews by PR head SHA.
-3. Add Testcontainers PostgreSQL/RabbitMQ integration tests and reviewed DLQ replay tooling.
-4. Measure and publish controlled webhook/review throughput results.
+1. Version reviews by PR head SHA.
+2. Add Testcontainers PostgreSQL/RabbitMQ integration tests and reviewed DLQ replay tooling.
+3. Measure and publish controlled webhook/review throughput results.
+4. Add provider-specific prompt regression fixtures for known injection patterns.

@@ -22,7 +22,7 @@
 | Duplicate delivery | Duplicate cost/comments | Repository/PR uniqueness plus orchestrator duplicate check | Synchronize events need head-SHA versioning |
 | Poison message | Worker retry loop | Retry queue, DLQ, no infinite requeue | Manual DLQ reprocessing is not implemented |
 | Secret leakage | Credential/source exposure | Sanitized errors, no payload/source logging | Third-party SDK logging must remain reviewed |
-| Untrusted diff prompt injection | Manipulated AI review | Deterministic demo provider; provider abstraction | Remote-provider prompt hardening is pending |
+| Untrusted diff prompt injection | Manipulated AI review | Diff treated as untrusted data, JSON-only remote prompts, deterministic fallback | Prompt regressions need fixture expansion |
 | Public Actuator details | Infrastructure disclosure | Limited exposure and hidden health details | Network restriction is deployment-owned |
 
 ## Security verification

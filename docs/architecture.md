@@ -11,6 +11,8 @@ flowchart LR
   ORCH -->|deduplicate| DB[(PostgreSQL)]
   ORCH --> GHO[GitHubOperations]
   ORCH --> AIP[AIProvider chain]
+  AIP --> OAI[OpenAI provider]
+  AIP --> CLAUDE[Claude provider]
   AIP --> DEMO[Deterministic demo provider]
   ORCH --> METRICS[Micrometer / Prometheus]
 ```
@@ -29,7 +31,7 @@ sequenceDiagram
   Q->>R: consume event
   R->>D: check/create unique review
   R->>A: analyze diff
-  A-->>R: deterministic structured result
+  A-->>R: structured review result
   R->>D: persist result
   R-->>G: post review comment
 ```
@@ -43,7 +45,7 @@ sequenceDiagram
 
 ## Trade-offs
 
-- The deterministic provider makes demo and tests reproducible, but remote OpenAI/Claude adapters are not yet
-  implemented against the new provider interface.
+- Remote OpenAI and Claude providers use bounded diff input, JSON-only review prompts, timeout, retry, and circuit
+  breaker policies. The deterministic provider remains the no-secrets fallback for demo and repeatable tests.
 - The database uniqueness constraint prevents concurrent duplicate reviews for one repository/PR number. A future
   version should include the PR head SHA to permit a new review after synchronization.
