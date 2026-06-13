@@ -22,7 +22,7 @@ jobs:
       - name: Backend tests and coverage gates
         working-directory: backend
         run: mvn --batch-mode clean verify
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: backend-coverage
           path: backend/target/site/jacoco
