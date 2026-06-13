@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.0</version>
+		<version>3.5.14</version>
 		<relativePath/>
 	</parent>
 	<groupId>com.codesage</groupId>
@@ -16,6 +16,10 @@
 	<properties>
 		<java.version>17</java.version>
 		<lombok.version>1.18.42</lombok.version>
+		<netty.version>4.1.135.Final</netty.version>
+		<postgresql.version>42.7.11</postgresql.version>
+		<testcontainers.version>1.21.4</testcontainers.version>
+		<tomcat.version>10.1.55</tomcat.version>
 	</properties>
 	<dependencies>
 		<!-- Spring Boot Starters -->
@@ -106,7 +110,7 @@
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>testcontainers</artifactId>
-			<version>1.19.3</version>
+			<version>${testcontainers.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -117,13 +121,13 @@
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>1.19.3</version>
+			<version>${testcontainers.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>rabbitmq</artifactId>
-			<version>1.19.3</version>
+			<version>${testcontainers.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
