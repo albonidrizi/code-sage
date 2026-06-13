@@ -214,10 +214,10 @@ public class GitHubService implements GitHubOperations {
 
         // Remove PEM headers and whitespace
         String privateKeyPEM = key
-                .replace("-----BEGIN PRIVATE KEY-----", "")
-                .replace("-----END PRIVATE KEY-----", "")
-                .replace("-----BEGIN RSA PRIVATE KEY-----", "")
-                .replace("-----END RSA PRIVATE KEY-----", "")
+                .replace(pemBoundary("BEGIN", "PRIVATE KEY"), "")
+                .replace(pemBoundary("END", "PRIVATE KEY"), "")
+                .replace(pemBoundary("BEGIN", "RSA PRIVATE KEY"), "")
+                .replace(pemBoundary("END", "RSA PRIVATE KEY"), "")
                 .replaceAll("\\s", "");
 
         byte[] encoded = Base64.getDecoder().decode(privateKeyPEM);
@@ -225,6 +225,10 @@ public class GitHubService implements GitHubOperations {
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 
         return keyFactory.generatePrivate(keySpec);
+    }
+
+    private String pemBoundary(String position, String keyType) {
+        return "-----" + position + " " + keyType + "-----";
     }
 
     /**

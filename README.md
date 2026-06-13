@@ -24,10 +24,16 @@ See [architecture](docs/architecture.md), [threat model](docs/threat-model.md), 
 
 Requirements: Docker with Compose.
 
-```bash
+PowerShell:
+
+```powershell
+$env:CODESAGE_DEMO_POSTGRES_USER = "codesage"
+$env:CODESAGE_DEMO_POSTGRES_PASSWORD = (New-Guid).Guid
+$env:CODESAGE_DEMO_RABBITMQ_USERNAME = "codesage"
+$env:CODESAGE_DEMO_RABBITMQ_PASSWORD = (New-Guid).Guid
 docker compose -f docker-compose.demo.yml up -d --build --wait
-curl --fail -X POST http://localhost:8080/api/demo/reviews
-curl --fail http://localhost:8080/api/reviews/recent
+curl.exe --fail -X POST http://localhost:8080/api/demo/reviews
+curl.exe --fail http://localhost:8080/api/reviews/recent
 ```
 
 Open the dashboard at <http://localhost:8088>. Stop and remove demo data with:
@@ -36,8 +42,9 @@ Open the dashboard at <http://localhost:8088>. Stop and remove demo data with:
 docker compose -f docker-compose.demo.yml down -v
 ```
 
-The demo Compose file contains local-only credentials. Production Compose requires explicit `POSTGRES_PASSWORD`,
-`RABBITMQ_USERNAME`, and `RABBITMQ_PASSWORD`, and keeps demo mode disabled.
+The demo Compose file requires runtime-generated local credentials and does not commit sample passwords. Production
+Compose requires explicit `POSTGRES_PASSWORD`, `RABBITMQ_USERNAME`, and `RABBITMQ_PASSWORD`, and keeps demo mode
+disabled.
 
 ## Local verification
 

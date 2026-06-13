@@ -2,19 +2,19 @@ services:
   postgres:
     image: postgres:15-alpine
     environment:
-      POSTGRES_USER: codesage
-      POSTGRES_PASSWORD: codesage-demo-db
+      POSTGRES_USER: ${CODESAGE_DEMO_POSTGRES_USER:?set CODESAGE_DEMO_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${CODESAGE_DEMO_POSTGRES_PASSWORD:?set CODESAGE_DEMO_POSTGRES_PASSWORD}
       POSTGRES_DB: codesage
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U codesage"]
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\""]
       interval: 5s
       timeout: 3s
       retries: 10
   rabbitmq:
     image: rabbitmq:3-management-alpine
     environment:
-      RABBITMQ_DEFAULT_USER: codesage
-      RABBITMQ_DEFAULT_PASS: codesage-demo-queue
+      RABBITMQ_DEFAULT_USER: ${CODESAGE_DEMO_RABBITMQ_USERNAME:?set CODESAGE_DEMO_RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${CODESAGE_DEMO_RABBITMQ_PASSWORD:?set CODESAGE_DEMO_RABBITMQ_PASSWORD}
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 5s
@@ -24,11 +24,11 @@ services:
     build: ./backend
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/codesage
-      SPRING_DATASOURCE_USERNAME: codesage
-      SPRING_DATASOURCE_PASSWORD: codesage-demo-db
+      SPRING_DATASOURCE_USERNAME: ${CODESAGE_DEMO_POSTGRES_USER:?set CODESAGE_DEMO_POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${CODESAGE_DEMO_POSTGRES_PASSWORD:?set CODESAGE_DEMO_POSTGRES_PASSWORD}
       SPRING_RABBITMQ_HOST: rabbitmq
-      SPRING_RABBITMQ_USERNAME: codesage
-      SPRING_RABBITMQ_PASSWORD: codesage-demo-queue
+      SPRING_RABBITMQ_USERNAME: ${CODESAGE_DEMO_RABBITMQ_USERNAME:?set CODESAGE_DEMO_RABBITMQ_USERNAME}
+      SPRING_RABBITMQ_PASSWORD: ${CODESAGE_DEMO_RABBITMQ_PASSWORD:?set CODESAGE_DEMO_RABBITMQ_PASSWORD}
       GITHUB_WEBHOOK_SIGNATURE_REQUIRED: "false"
       CODESAGE_DEMO_ENABLED: "true"
     ports: ["8080:8080"]
@@ -36,7 +36,7 @@ services:
       postgres: { condition: service_healthy }
       rabbitmq: { condition: service_healthy }
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 10

@@ -65,21 +65,21 @@ Required variables:
 
 ```bash
 # AI Provider (at least one required)
-OPENAI_API_KEY=sk-...
+OPENAI_API_KEY=
 # OR
-CLAUDE_API_KEY=sk-ant-...
+CLAUDE_API_KEY=
 
 # GitHub App (optional for local dev)
 GITHUB_APP_ID=123456
 GITHUB_APP_PRIVATE_KEY_PATH=/path/to/key.pem
 GITHUB_INSTALLATION_ID=987654
-GITHUB_WEBHOOK_SECRET=your-secret
+GITHUB_WEBHOOK_SECRET=
 
 # Database
-POSTGRES_PASSWORD=secure-password-here
+POSTGRES_PASSWORD=
 
 # RabbitMQ
-RABBITMQ_PASSWORD=secure-password-here
+RABBITMQ_PASSWORD=
 ```
 
 ### SSL/TLS Setup

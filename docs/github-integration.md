@@ -66,10 +66,10 @@ Create a `.env` file or set environment variables:
 GITHUB_APP_ID=123456                    # From GitHub App settings
 GITHUB_APP_PRIVATE_KEY_PATH=/path/to/private-key.pem
 GITHUB_INSTALLATION_ID=987654           # From installation URL
-GITHUB_WEBHOOK_SECRET=your-secret-here  # From webhook configuration
+GITHUB_WEBHOOK_SECRET=                  # From webhook configuration
 
 # AI Provider
-OPENAI_API_KEY=sk-...                   # Your OpenAI API key
+OPENAI_API_KEY=                         # Your OpenAI API key
 ```
 
 ## Step 5: Test the Integration

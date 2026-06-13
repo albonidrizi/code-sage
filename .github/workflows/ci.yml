@@ -65,24 +65,30 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - name: Trivy filesystem gate
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         with:
           scan-type: fs
           scan-ref: .
           severity: HIGH,CRITICAL
           ignore-unfixed: true
           exit-code: "1"
-      - name: Gitleaks secret scan
-        uses: gitleaks/gitleaks-action@v2
+      - name: Gitleaks current tree secret scan
+        run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.30.1 detect --source=/repo --no-git --redact --verbose
 
   docker-demo-smoke:
     needs: [backend, frontend]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Generate demo credentials
+        run: |
+          {
+            echo "CODESAGE_DEMO_POSTGRES_USER=codesage"
+            echo "CODESAGE_DEMO_POSTGRES_PASSWORD=$(openssl rand -hex 24)"
+            echo "CODESAGE_DEMO_RABBITMQ_USERNAME=codesage"
+            echo "CODESAGE_DEMO_RABBITMQ_PASSWORD=$(openssl rand -hex 24)"
+          } >> "$GITHUB_ENV"
       - name: Build demo stack
         run: docker compose -f docker-compose.demo.yml build
       - name: Start demo stack
