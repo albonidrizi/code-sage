@@ -79,6 +79,7 @@ jobs:
           scan-ref: .
           scanners: vuln,secret
           skip-dirs: frontend/node_modules,backend/target,frontend/dist,frontend/coverage
+          cache-dir: /tmp/trivy-cache
           timeout: 10m
           severity: HIGH,CRITICAL
           ignore-unfixed: true
