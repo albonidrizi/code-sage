@@ -20,7 +20,7 @@ api.interceptors.request.use(
         return config;
     },
     (error) => {
-        console.error('[API] Request error:', error);
+        console.warn('[API] Request error:', error.message);
         return Promise.reject(error);
     }
 );
@@ -31,7 +31,7 @@ api.interceptors.response.use(
         return response;
     },
     (error) => {
-        console.error('[API] Response error:', error.response?.data || error.message);
+        console.warn('[API] Response unavailable, dashboard may use demo data:', error.response?.data || error.message);
 
         if (error.response) {
             // Server responded with error status
