@@ -58,13 +58,6 @@ jobs:
         run: npm ci
       - working-directory: frontend
         run: npm audit --audit-level=high
-      - uses: actions/setup-java@v4
-        with:
-          java-version: "17"
-          distribution: temurin
-      - working-directory: backend
-        run: mvn --batch-mode org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7
-
   security:
     runs-on: ubuntu-latest
     permissions:

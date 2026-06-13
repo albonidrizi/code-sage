@@ -29,6 +29,6 @@
 
 - `npm audit --audit-level=high`
 - CI Trivy filesystem gate
-- CI OWASP Maven dependency check
+- CI Trivy dependency/filesystem scan
 - CI Gitleaks scan
 - CodeQL workflow

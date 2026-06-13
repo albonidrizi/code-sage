@@ -1,4 +1,4 @@
-# Multi-stage build for production-ready backend
+# Multi-stage build for the backend service
 
 # Stage 1: Build
 FROM maven:3.9-eclipse-temurin-17 AS build

@@ -25,6 +25,7 @@ import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
+import java.util.Locale;
 
 /**
  * Service for GitHub API integration.
@@ -64,7 +65,7 @@ public class GitHubService implements GitHubOperations {
     public String fetchPRDiff(String owner, String repo, int prNumber) {
         log.info("Fetching PR diff for {}/{} #{}", owner, repo, prNumber);
 
-        if (appId == null || privateKeyPath == null) {
+        if (isBlank(appId) || isBlank(privateKeyPath) || isBlank(installationId)) {
             log.warn("GitHub App not configured. Returning mock diff.");
             return getMockDiff();
         }
@@ -104,7 +105,7 @@ public class GitHubService implements GitHubOperations {
     public void postComment(String owner, String repo, int prNumber, String comment) {
         log.info("Posting comment to PR {}/{} #{}", owner, repo, prNumber);
 
-        if (appId == null || privateKeyPath == null) {
+        if (isBlank(appId) || isBlank(privateKeyPath) || isBlank(installationId)) {
             log.warn("GitHub App not configured. Logging comment instead:");
             log.info("Comment for PR #{}: {}", prNumber, comment);
             return;
@@ -246,6 +247,10 @@ public class GitHubService implements GitHubOperations {
                 """;
     }
 
+    private boolean isBlank(String value) {
+        return value == null || value.isBlank();
+    }
+
     /**
      * Format review as GitHub comment
      */
@@ -254,29 +259,29 @@ public class GitHubService implements GitHubOperations {
         StringBuilder comment = new StringBuilder();
 
         comment.append("## CodeSage Review\n\n");
-        comment.append(String.format("**Quality Score:** %.1f/10\n\n", review.getQualityScore()));
-        comment.append(String.format("**Summary:** %s\n\n", review.getAnalysisSummary()));
+        comment.append(String.format(Locale.ROOT, "**Quality Score:** %.1f/10\n\n", review.getQualityScore()));
+        comment.append(String.format(Locale.ROOT, "**Summary:** %s\n\n", review.getAnalysisSummary()));
 
         if (!review.getIssues().isEmpty()) {
             comment.append("### Issues Found\n\n");
 
             for (com.codesage.model.ReviewIssue issue : review.getIssues()) {
-                comment.append(String.format("**%s** - %s\n", issue.getSeverity(), issue.getTitle()));
-                comment.append(String.format("- **File:** `%s`", issue.getFilePath()));
+                comment.append(String.format(Locale.ROOT, "**%s** - %s\n", issue.getSeverity(), issue.getTitle()));
+                comment.append(String.format(Locale.ROOT, "- **File:** `%s`", issue.getFilePath()));
                 if (issue.getLineNumber() != null) {
-                    comment.append(String.format(" (Line %d)", issue.getLineNumber()));
+                    comment.append(String.format(Locale.ROOT, " (Line %d)", issue.getLineNumber()));
                 }
                 comment.append("\n");
-                comment.append(String.format("- **Description:** %s\n", issue.getDescription()));
+                comment.append(String.format(Locale.ROOT, "- **Description:** %s\n", issue.getDescription()));
                 if (issue.getSuggestion() != null && !issue.getSuggestion().isEmpty()) {
-                    comment.append(String.format("- **Suggestion:** %s\n", issue.getSuggestion()));
+                    comment.append(String.format(Locale.ROOT, "- **Suggestion:** %s\n", issue.getSuggestion()));
                 }
                 comment.append("\n");
             }
         }
 
         comment.append("\n---\n");
-        comment.append(String.format("*Powered by %s (%s)*", review.getAiProvider(), review.getAiModel()));
+        comment.append(String.format(Locale.ROOT, "*Powered by %s (%s)*", review.getAiProvider(), review.getAiModel()));
 
         return comment.toString();
     }

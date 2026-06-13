@@ -15,7 +15,7 @@ Security fixes target `main`.
 - CORS origins are environment-configurable.
 - Actuator exposes only health, info, and Prometheus; health details are hidden.
 - External-service errors return sanitized client messages.
-- CI gates high/critical Trivy findings, high npm advisories, high-CVSS Maven advisories, and leaked secrets.
+- CI gates high/critical Trivy dependency/filesystem findings, high npm advisories, and leaked secrets.
 
 ## Operational requirements
 

@@ -1,4 +1,4 @@
-# Multi-stage build for production-ready frontend
+# Multi-stage build for the frontend service
 
 # Stage 1: Build
 FROM node:20-alpine AS build

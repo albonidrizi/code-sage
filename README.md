@@ -57,7 +57,7 @@ Verified on June 13, 2026:
 
 | Surface | Result |
 |---|---|
-| Backend | 11 tests passed |
+| Backend | 13 tests passed |
 | Backend gated business core | 97.8% line, 82.1% branch |
 | Frontend | 4 tests passed |
 | Frontend | 93.06% line, 85% branch |
