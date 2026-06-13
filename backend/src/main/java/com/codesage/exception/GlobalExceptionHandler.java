@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(
                 HttpStatus.BAD_GATEWAY,
                 "GitHub API Error",
-                ex.getMessage(),
+                "The GitHub operation failed.",
                 request);
     }
 
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(
                 HttpStatus.SERVICE_UNAVAILABLE,
                 "AI Service Error",
-                ex.getMessage(),
+                "The AI analysis operation failed.",
                 request);
     }
 

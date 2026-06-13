@@ -1,6 +1,7 @@
 package com.codesage.service;
 
 import com.codesage.exception.GitHubApiException;
+import com.codesage.github.GitHubOperations;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
@@ -31,7 +32,7 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class GitHubService {
+public class GitHubService implements GitHubOperations {
 
     private final WebClient githubClient;
     private final ObjectMapper objectMapper;
@@ -92,6 +93,11 @@ public class GitHubService {
         }
     }
 
+    @Override
+    public String fetchPullRequestDiff(String owner, String repository, int pullRequestNumber) {
+        return fetchPRDiff(owner, repository, pullRequestNumber);
+    }
+
     /**
      * Post review comment to GitHub PR
      */
@@ -128,6 +134,11 @@ public class GitHubService {
             log.error("Unexpected error posting comment", e);
             throw new GitHubApiException("Failed to post comment: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void postReviewComment(String owner, String repository, int pullRequestNumber, String comment) {
+        postComment(owner, repository, pullRequestNumber, comment);
     }
 
     /**
@@ -238,10 +249,11 @@ public class GitHubService {
     /**
      * Format review as GitHub comment
      */
+    @Override
     public String formatReviewComment(com.codesage.model.Review review) {
         StringBuilder comment = new StringBuilder();
 
-        comment.append("## 🤖 CodeSage Review\n\n");
+        comment.append("## CodeSage Review\n\n");
         comment.append(String.format("**Quality Score:** %.1f/10\n\n", review.getQualityScore()));
         comment.append(String.format("**Summary:** %s\n\n", review.getAnalysisSummary()));
 
@@ -249,15 +261,7 @@ public class GitHubService {
             comment.append("### Issues Found\n\n");
 
             for (com.codesage.model.ReviewIssue issue : review.getIssues()) {
-                String emoji = switch (issue.getSeverity()) {
-                    case CRITICAL -> "🚨";
-                    case HIGH -> "⚠️";
-                    case MEDIUM -> "💡";
-                    case LOW -> "ℹ️";
-                    case INFO -> "📝";
-                };
-
-                comment.append(String.format("%s **%s** - %s\n", emoji, issue.getSeverity(), issue.getTitle()));
+                comment.append(String.format("**%s** - %s\n", issue.getSeverity(), issue.getTitle()));
                 comment.append(String.format("- **File:** `%s`", issue.getFilePath()));
                 if (issue.getLineNumber() != null) {
                     comment.append(String.format(" (Line %d)", issue.getLineNumber()));

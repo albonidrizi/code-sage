@@ -34,6 +34,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             String repositoryName,
             Integer prNumber);
 
+    boolean existsByRepositoryOwnerAndRepositoryNameAndPrNumber(
+            String repositoryOwner,
+            String repositoryName,
+            Integer prNumber);
+
     /**
      * Find all reviews with a specific status
      */

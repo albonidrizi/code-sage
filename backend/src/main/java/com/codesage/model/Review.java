@@ -15,7 +15,9 @@ import java.util.List;
  * Stores the analysis results, score, and metadata.
  */
 @Entity
-@Table(name = "reviews", indexes = {
+@Table(name = "reviews", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_review_repo_pr", columnNames = {"repository_owner", "repository_name", "pr_number"})
+}, indexes = {
         @Index(name = "idx_repo_pr", columnList = "repository_owner,repository_name,pr_number"),
         @Index(name = "idx_created_at", columnList = "created_at")
 })
