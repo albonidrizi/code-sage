@@ -1,5 +1,8 @@
 # CodeSage
 
+[![CI](https://github.com/albonidrizi/code-sage/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/albonidrizi/code-sage/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/albonidrizi/code-sage/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/albonidrizi/code-sage/actions/workflows/codeql.yml)
+
 CodeSage is a reference implementation of an asynchronous pull-request review service. It validates GitHub webhooks,
 queues review work, prevents duplicate reviews, runs OpenAI, Claude, or deterministic demo analysis providers,
 persists findings, exposes metrics, and presents results in a React dashboard.
@@ -19,6 +22,16 @@ It is a portfolio/reference project, not a hosted production service.
 
 See [architecture](docs/architecture.md), [threat model](docs/threat-model.md), [performance](docs/performance.md), and
 [security policy](SECURITY.md).
+
+## Public evidence
+
+| Evidence | Status |
+|---|---|
+| Main-branch CI | [Passing run: backend, frontend, dependency audit, security, and Docker demo smoke](https://github.com/albonidrizi/code-sage/actions/runs/27479507566) |
+| Code scanning | [Passing scheduled CodeQL run](https://github.com/albonidrizi/code-sage/actions/runs/27540400113) |
+| Architecture decisions | [Deterministic demo provider](docs/decisions/0001-deterministic-demo-provider.md) and [queue retry/DLQ](docs/decisions/0002-queue-retry-and-dlq.md) |
+| Metrics | [Prometheus metric surface and reproducible measurement command](docs/performance.md) |
+| Hosted deployment, release, and demo video | Not currently published; use the reproducible Docker Compose demo below |
 
 ## Demo quick start
 
@@ -87,7 +100,7 @@ CODESAGE_DEMO_ENABLED=false
 - Duplicate prevention keys on repository and PR number, not PR head SHA.
 - DLQ reprocessing is manual.
 - Actuator network access control must be enforced by the deployment platform.
-- The latest public GitHub Actions run predates these local changes and is failing; a new run is required after push.
+- There is no hosted public deployment, tagged release, or demo video yet.
 
 ## Roadmap
 
